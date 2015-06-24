@@ -27,7 +27,7 @@
 #' print(iris_rfncov)
 rfcv_ncov<- function (trainx, trainy, cv.fold = 5, scale = "log", step = 0.5, 
                       mtry = function(p) max(1, floor(sqrt(p))), recursive = FALSE, 
-                      ntree=500, ncore=parallel::detectCores(), verbose=TRUE,
+                      ntree=500, ncore=min(parallel::detectCores(),6), verbose=TRUE,
                       ...) {
   classRF <- is.factor(trainy)
   n <- nrow(trainx)
@@ -96,6 +96,7 @@ rfcv_ncov<- function (trainx, trainy, cv.fold = 5, scale = "log", step = 0.5,
     NULL
     if(verbose) cat(i,", ")
   }
+  if(foreach::getDoParRegistered()) doParallel::stopImplicitCluster()
   # calculate reported measures
   if (classRF) {
     error.cv <- sapply(cv.pred, function(x) mean(trainy != x))
@@ -116,10 +117,10 @@ rfcv_ncov<- function (trainx, trainy, cv.fold = 5, scale = "log", step = 0.5,
   n_top <- n.var[which.min(error.cv)]
   # rf with the selected variabels and all variables
   # use seq. random forest here, to keep OOB error est.
-  rf_top <- randomForest(trainx[, impvar[1:n_top], drop = FALSE], trainy, 
+  rf_top <- randomForest::randomForest(trainx[, impvar[1:n_top], drop = FALSE], trainy, 
                          importance = T, ntree=ntree,
                          ...)
-  rf_all <- randomForest(trainx, trainy, 
+  rf_all <- randomForest::randomForest(trainx, trainy, 
                          importance = T, ntree=ntree,
                          ...)
   if (classRF){

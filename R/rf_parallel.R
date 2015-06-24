@@ -17,7 +17,7 @@
 #' iris_rfp <- rf_parallel(Species ~ ., data=iris)
 #' print(iris_rfp)
 #' table(iris_rfp$predicted, iris$Species)
-rf_parallel <- function(x, y=NULL, ntree=500, ncore=parallel::detectCores(), ...){
+rf_parallel <- function(x, y=NULL, ntree=500, ncore=min(parallel::detectCores(),6), ...){
   # optional parallel backend
   if (ncore > 1) {
     # check if already registered

@@ -19,6 +19,6 @@ Calculate accuracy measures from error matrix
 }
 \examples{
 error_m <- matrix(c(99, 2, 23, 45), ncol = 2)
-ac_ac_measures_from_em(error_m, c("a", "b"))
+ac_measures_from_em(error_m, c("a", "b"))
 }
 

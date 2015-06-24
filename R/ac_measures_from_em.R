@@ -8,7 +8,7 @@
 #'
 #' @examples
 #' error_m <- matrix(c(99, 2, 23, 45), ncol = 2)
-#' ac_ac_measures_from_em(error_m, c("a", "b"))
+#' ac_measures_from_em(error_m, c("a", "b"))
 ac_measures_from_em <- function(em, em_dimnames = NULL){
   if (is.null(em_dimnames)) em_dimnames <- dimnames(em)[[1]]
   OA <- sum(diag(em)) / sum(em)
