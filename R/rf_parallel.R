@@ -5,6 +5,7 @@
 #' @inheritParams randomForest::randomForest
 #' @return A randomForest object. No confusion matrix, err.rate, mse and rsq components are returned!
 #' @export
+#' @importFrom foreach "%dopar%"
 #' @details Parallel random forest using foreach and the original \code{\link[randomForest]{randomForest}}. 
 #' The number of trees is devided over the cores and grown parallel. The returned rf objects are combiend 
 #' using \code{\link[randomForest]{combine}}
@@ -24,7 +25,7 @@ rf_parallel <- function(x, y=NULL, ntree=500, ncore=parallel::detectCores(), ...
   } else foreach::registerDoSEQ()
   rf <- foreach::foreach(ntree_i=rep(floor(ntree/ncore), ncore), 
                 .combine=randomForest::combine, 
-                .packages='randomForest') %do% {
+                .packages='randomForest') %dopar% {
                   randomForest::randomForest(x, y, ntree=ntree_i, ...)
                 }
   return(rf)
