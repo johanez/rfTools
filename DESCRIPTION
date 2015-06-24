@@ -7,9 +7,11 @@ Author: J Eberenz
 Maintainer: Who to complain to <yourfault@somewhere.net>
 Description: Some tools for parallel randomForest mdoels and optimizing
 License: GPL-3
-Imports:
+Imports: 
     doParallel,
     foreach,
     parallel,
     randomForest,
     raster
+Suggests: knitr
+VignetteBuilder: knitr

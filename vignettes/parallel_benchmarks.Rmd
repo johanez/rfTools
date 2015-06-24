@@ -1,0 +1,46 @@
+---
+title: "Paralle RandomForest benchmarks"
+author: "J Eberenz"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Paralle RandomForest benchmarks}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+## Timing
+Compare regular to parallel functions:
+
+```{r, results='hide'}
+require(rfTools)
+res <- data.frame(parallel=rep(c("Parallel", "Seq."), 2), time=numeric(4), fun=rep(c("rf", "rfcv_ncov"),each=2))
+data("airquality")
+airquality_complete <-  na.omit(airquality)
+res$time[1] <- system.time(
+  aq_rfncov <- rfcv_ncov(trainx=airquality_complete[ ,names(airquality_complete) != "Ozone"],
+                         trainy = airquality_complete$Ozone, 
+                         na.action=na.omit, ntree=5000)
+  )[1]
+
+res$time[2] <- system.time(
+  aq_rfncov <- rfcv_ncov(trainx=airquality_complete[ ,names(airquality_complete) != "Ozone"], 
+                         trainy = airquality_complete$Ozone, 
+                         ntree = 5000, ncore = 1)
+  )[1]
+
+res$time[3] <- system.time(
+  rf_parallel(Ozone ~., data = airquality_complete, ntree=5000, ncore=4)
+  )[1]
+
+res$time[4] <- system.time(
+  randomForest(Ozone ~., data = airquality_complete, ntree=5000)
+  )[1]
+```
+Results:
+```{r, message=FALSE}
+print(res$time)
+barplot(res$time, col=res$parallel, names.arg = paste(res$parallel, res$fun))
+```
+
+
