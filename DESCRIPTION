@@ -10,8 +10,6 @@ License: GPL-3
 Imports: 
     doParallel,
     foreach,
-    parallel,
-    randomForest,
-    raster
+    randomForest
 Suggests: knitr
 VignetteBuilder: knitr

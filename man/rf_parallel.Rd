@@ -4,8 +4,8 @@
 \alias{rf_parallel}
 \title{Parallel random forest using foreach}
 \usage{
-rf_parallel(x, y = NULL, ntree = 500, ncore = parallel::detectCores(),
-  ...)
+rf_parallel(x, y = NULL, ntree = 500, ncore = min(parallel::detectCores(),
+  6), ...)
 }
 \arguments{
 \item{x}{a data frame or a matrix of predictors, or a formula
@@ -39,7 +39,7 @@ using \code{\link[randomForest]{combine}}
 ## Classification:
 ##data(iris)
 set.seed(71)
-iris_rfp <- rf_parallel(Species ~ ., data=iris)
+iris_rfp <- rf_parallel(Species ~ ., data=iris, ncore = 2)
 print(iris_rfp)
 table(iris_rfp$predicted, iris$Species)
 }

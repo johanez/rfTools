@@ -6,7 +6,8 @@
 #' Title
 #' A modified \code{\link[randomForest]{rfcv}} that returns the rf with he optimal ncov and the selected variables 
 #' @inheritParams randomForest::rfcv
-#' @param ncore Number of cores to use (set to 1 for sequential computing)
+#' @param ntree Number of trees for rf models.
+#' @param ncore Number of cores to use (set to 1 for sequential computing).
 #' @param verbose Should progress indication be printed?
 #' @param ... additional arguments to \code{\link[randomForest]{randomForest}}
 #'
@@ -23,7 +24,8 @@
 #' #' ## Classification:
 #' ##data(iris)
 #' set.seed(71)
-#' iris_rfncov <- rfcv_ncov(trainx=iris[ ,names(iris) != "Species"], trainy = iris$Species)
+#' iris_rfncov <- rfcv_ncov(trainx=iris[ ,names(iris) != "Species"], 
+#'                          trainy = iris$Species, ncore = 2)
 #' print(iris_rfncov)
 rfcv_ncov<- function (trainx, trainy, cv.fold = 5, scale = "log", step = 0.5, 
                       mtry = function(p) max(1, floor(sqrt(p))), recursive = FALSE, 

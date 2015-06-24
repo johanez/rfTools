@@ -14,7 +14,7 @@
 #' ## Classification:
 #' ##data(iris)
 #' set.seed(71)
-#' iris_rfp <- rf_parallel(Species ~ ., data=iris)
+#' iris_rfp <- rf_parallel(Species ~ ., data=iris, ncore = 2)
 #' print(iris_rfp)
 #' table(iris_rfp$predicted, iris$Species)
 rf_parallel <- function(x, y=NULL, ntree=500, ncore=min(parallel::detectCores(),6), ...){

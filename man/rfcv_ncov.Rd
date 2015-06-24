@@ -7,7 +7,8 @@ A modified \code{\link[randomForest]{rfcv}} that returns the rf with he optimal 
 \usage{
 rfcv_ncov(trainx, trainy, cv.fold = 5, scale = "log", step = 0.5,
   mtry = function(p) max(1, floor(sqrt(p))), recursive = FALSE,
-  ntree = 500, ncore = parallel::detectCores(), verbose = TRUE, ...)
+  ntree = 500, ncore = min(parallel::detectCores(), 6), verbose = TRUE,
+  ...)
 }
 \arguments{
 \item{trainx}{matrix or data frame containing columns of predictor
@@ -31,7 +32,9 @@ rfcv_ncov(trainx, trainy, cv.fold = 5, scale = "log", step = 0.5,
 \item{recursive}{whether variable importance is (re-)assessed at each
   step of variable reduction}
 
-\item{ncore}{Number of cores to use (set to 1 for sequential computing)}
+\item{ntree}{Number of trees for rf models.}
+
+\item{ncore}{Number of cores to use (set to 1 for sequential computing).}
 
 \item{verbose}{Should progress indication be printed?}
 
@@ -54,7 +57,8 @@ A modified \code{\link[randomForest]{rfcv}} that returns the rf with he optimal 
 #' ## Classification:
 ##data(iris)
 set.seed(71)
-iris_rfncov <- rfcv_ncov(trainx=iris[ ,names(iris) != "Species"], trainy = iris$Species)
+iris_rfncov <- rfcv_ncov(trainx=iris[ ,names(iris) != "Species"],
+                         trainy = iris$Species, ncore = 2)
 print(iris_rfncov)
 }
 

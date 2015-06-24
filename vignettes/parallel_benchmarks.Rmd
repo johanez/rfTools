@@ -20,7 +20,7 @@ airquality_complete <-  na.omit(airquality)
 res$time[1] <- system.time(
   aq_rfncov <- rfcv_ncov(trainx=airquality_complete[ ,names(airquality_complete) != "Ozone"],
                          trainy = airquality_complete$Ozone, 
-                         na.action=na.omit, ntree=5000)
+                         na.action=na.omit, ntree=5000, ncore=2)
   )[1]
 
 res$time[2] <- system.time(
@@ -30,7 +30,7 @@ res$time[2] <- system.time(
   )[1]
 
 res$time[3] <- system.time(
-  rf_parallel(Ozone ~., data = airquality_complete, ntree=5000, ncore=4)
+  rf_parallel(Ozone ~., data = airquality_complete, ntree=5000, ncore=2)
   )[1]
 
 res$time[4] <- system.time(
